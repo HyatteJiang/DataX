@@ -344,7 +344,9 @@ public class ESWriter extends Writer {
                                     String dateStr = getDateStr(columnList.get(i), column);
                                     data.put(columnName, dateStr);
                                 } catch (Exception e) {
-                                    getTaskPluginCollector().collectDirtyRecord(record, String.format("时间类型解析失败 [%s:%s] exception: %s", columnName, column.toString(), e.toString()));
+                                    if (column.getByteSize() != 0) {
+                                        getTaskPluginCollector().collectDirtyRecord(record, String.format("非空时间类型解析失败 [%s:%s] exception: %s", columnName, column.toString(), e.toString()));
+                                    }
                                 }
                                 break;
                             case KEYWORD:
